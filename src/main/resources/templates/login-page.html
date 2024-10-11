@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Вход пользователя</title>
+</head>
+<body>
+<th:block sec:authorize="!isAuthenticated()">
+    <h2>Войдите или зарегистрируйтесь</h2>
+    <a th:href="@{/registration}">Регистрация</a>
+    <br />
+    <br />
+    <span th:text="${registerUser}" style="color: green"></span>
+    <span th:if="${authenticationException != null}" th:text="${authenticationException.getMessage()}" style="color: red"></span>
+    <br />
+    <br />
+    <form th:action="@{/login}" th:method="post">
+        <div>
+            <label for="username">Имя пользователя:</label>
+            <input type="text" id="username" name="username"
+                   th:value="${authenticationException != null} ? ${authenticationException.getUsername()} : ''">
+        </div>
+        <br />
+        <div>
+            <label for="password">Пароль:</label>
+            <input type="password" id="password" name="password"
+                   th:value="${authenticationException != null} ? ${authenticationException.getPassword()} : ''">
+        </div>
+        <br />
+        <button type="submit">Войти</button>
+    </form>
+</th:block>
+</body>
+</html>

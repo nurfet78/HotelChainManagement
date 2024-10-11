@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Список отелей</title>
+</head>
+<body>
+    <a th:href="@{/}">Домашняя</a>
+    <br />
+    <br />
+    <h1>Список отелей</h1>
+
+    <div th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}">
+        <a th:href="@{/hotels/new}">Добавить новый отель</a>
+        <br />
+        <br />
+    </div>
+
+    <!-- Форма поиска -->
+    <form th:action="@{/hotels/search}" method="get">
+        <label for="search">Поиск:</label>
+        <input type="text" name="query" id="search" placeholder="Поиск отелей..." th:value="${query}">
+        <button type="submit">Найти</button>
+    </form>
+    <br />
+
+    <table>
+        <thead>
+            <tr>
+                <th>Название отеля</th>
+                <th>Местоположение</th>
+                <th>Рейтинг</th>
+                <th>Услуги</th>
+                <th>Действия</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="hotel : ${hotels}">
+                <td>
+                    <a th:href="@{/hotels/{id}(id=${hotel.id})}" th:text="${hotel.name}">Отель</a>
+                </td>
+                <td th:text="${hotel.location}">Местоположение</td>
+                <td th:text="${hotel.rating}">Рейтинг</td>
+                <td>
+                    <ul>
+                        <li th:each="service : ${hotel.services}" th:text="${service}"></li>
+                    </ul>
+                </td>
+                <td>
+                    <div th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}" style="display: inline;">
+                        <a th:href="@{/hotels/{id}/edit(id=${hotel.id})}">Редактировать</a>
+                        <span>|</span>
+                        <form th:action="@{/hotels/{id}/delete(id=${hotel.id})}" method="post" style="display:inline;">
+                            <button type="submit">Удалить</button>
+                        </form>
+                    </div>
+                    <span>|</span>
+                    <a th:href="@{/hotels/{hotelId}/rooms(hotelId=${hotel.id})}">Номера</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div th:if="${message}" th:text="${message}" style="color: green"></div>
+</body>
+</html>

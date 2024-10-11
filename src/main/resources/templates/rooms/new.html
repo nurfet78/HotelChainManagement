@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Добавить номер</title>
+</head>
+<body>
+    <a th:href="@{/}">Домашняя</a>
+    <br />
+    <br />
+    <h1>Добавить номер для отеля <span th:text="${hotel.name}"></span></h1>
+
+    <form th:action="@{/hotels/{hotelId}/rooms(hotelId=${hotel.id})}" th:object="${room}" method="post">
+        <div>
+            <label for="category">Категория:</label>
+            <input type="text" id="category" th:field="*{category}" placeholder="Категория">
+        </div>
+        <br />
+        <div>
+           <label for="price">Цена:</label>
+           <input type="number" id="price" th:field="*{price}" placeholder="Цена" step="0.01">
+        </div>
+        <br />
+        <div>
+            <label for="description">Описание:</label>
+            <textarea id="description" th:field="*{description}" placeholder="Описание номера"></textarea>
+        </div>
+        <br />
+        <button type="submit">Добавить номер</button>
+    </form>
+    <br />
+    <a th:href="@{/hotels/{hotelId}/rooms(hotelId=${hotel.id})}">Назад к списку номеров</a>
+</body>
+</html>

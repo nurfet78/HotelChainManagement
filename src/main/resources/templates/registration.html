@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Регистрация</title>
+</head>
+<body>
+    <h2>Регистрация</h2>
+        <form th:action="@{/registration}" th:object="${userDto}" th:method="post">
+            <div>
+            <label for="firstName">Имя:</label>
+            <input type="text" id="firstName" th:field="*{firstName}" placeholder="Имя">
+            <span th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}" style="color: red"></span>
+        </div>
+        <br />
+        <div>
+            <label for="lastName">Фамилия:</label>
+            <input type="text" id="lastName" th:field="*{lastName}" placeholder="Фамилия">
+            <span th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}" style="color: red"></span>
+        </div>
+        <br />
+        <div>
+            <label for="email">Email:</label>
+            <input type="text" id="email" th:field="*{email}" placeholder="Email">
+            <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}" style="color: red"></span>
+        </div>
+        <br />
+        <div>
+            <label for="phone">Телефон:</label>
+            <input type="tel" id="phone" th:field="*{phone}" placeholder="+x(xxx)xxx-xx-xx">
+            <span th:if="${#fields.hasErrors('phone')}" th:errors="*{phone}" style="color: red"></span>
+        </div>
+        <br />
+        <div>
+            <label for="username">Имя пользователя:</label>
+            <input type="text" id="username" th:field="*{username}" placeholder="Имя пользователя">
+            <span th:if="${#fields.hasErrors('username')}" th:errors="*{username}" style="color: red"></span>
+            <span th:text="${errorMessage}" style="color: red"></span>
+        </div>
+        <br />
+        <div>
+            <label for="password">Пароль:</label>
+            <input type="password" id="password" th:field="*{password}" placeholder="Пароль">
+            <span th:if="${#fields.hasErrors('password')}" th:errors="*{password}" style="color: red"></span>
+        </div>
+        <input type="hidden" id="roles" name="roles" value="ROLE_USER">
+        <br />
+        <button type="submit">Зарегистрироваться</button>
+    </form>
+    <br />
+    <a th:href="@{/login}">Отмена</a>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
+            integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/5.0.9/jquery.inputmask.min.js"
+            integrity="sha512-F5Ul1uuyFlGnIT1dk2c4kB4DBdi5wnBJjVhL7gQlGh46Xn0VhvD8kgxLtjdZ5YN83gybk/aASUAlpdoWUjRR3g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <script>
+        $(document).ready(function(){
+            $('#phone').inputmask({
+                mask: "+9(999)999-99-99",
+                placeholder: "_"
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Доступ запрещен</title>
+</head>
+<body>
+    <h2>Доступ запрещен</h2>
+    <div>
+        <p>Исключение: <span th:text="${exception}"></span></p>
+        <p>Сообщение: <span th:text="${message}"></span></p>
+        <p>URL: <span th:text="${URL}"></span></p>
+        <p>Дата: <span th:text="${timestamp}"></span></p>
+    </div>
+    <br />
+    <a href="javascript:history.back()">Назад</a>
+</body>
+</html>

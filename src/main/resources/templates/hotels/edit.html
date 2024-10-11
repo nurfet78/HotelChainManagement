@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Редактировать отель</title>
+</head>
+<body>
+    <a th:href="@{/}">Домашняя</a>
+    <br />
+    <br />
+    <h1>Редактировать отель</h1>
+
+    <form th:action="@{/hotels/{id}(id=${hotel.id})}" th:object="${hotel}" method="post">
+        <div>
+            <label for="name">Название:</label>
+            <input type="text" id="name" th:field="*{name}" placeholder="Название">
+            <span th:if="${#fields.hasErrors('name')}" th:errors="*{name}"
+                  style="color: red"></span>
+        </div>
+        <br />
+        <div>
+           <label for="location">Местоположение:</label>
+           <input type="text" id="location" th:field="*{location}" placeholder="Местоположение">
+            <span th:if="${#fields.hasErrors('location')}" th:errors="*{location}"
+                  style="color: red"></span>
+        </div>
+        <br />
+        <div>
+            <label for="services">Услуги (через запятую):</label>
+            <input type="text" id="services" th:field="*{services}" placeholder="Wi-Fi, Завтрак">
+            <span th:if="${#fields.hasErrors('services')}" th:errors="*{services}"
+                  style="color: red"></span>
+        </div>
+        <br />
+        <div>
+            <label for="rating">Рейтинг:</label>
+            <input type="number" id="rating" th:field="*{rating}" step="0.1" placeholder="4.5">
+            <span th:if="${#fields.hasErrors('rating')}" th:errors="*{rating}"
+                  style="color: red"></span>
+        </div>
+        <br />
+        <div>
+            <label for="description">Описание:</label>
+            <textarea id="description" th:field="*{description}" placeholder="Описание отеля"></textarea>
+            <span th:if="${#fields.hasErrors('description')}" th:errors="*{description}"
+                  style="color: red"></span>
+        </div>
+        <br />
+        <button type="submit">Сохранить изменения</button>
+    </form>
+    <br />
+    <a th:href="@{/hotels}">Назад к списку отелей</a>
+</body>
+</html>

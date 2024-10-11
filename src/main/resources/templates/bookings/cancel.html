@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Отменить бронь</title>
+</head>
+<body>
+    <a th:href="@{/}">Домашняя</a>
+    <br />
+    <br />
+  <h1>Отменить бронь</h1>
+  <p>Вы уверены, что хотите отменить бронирование?</p>
+
+  <br />
+  <form th:action="@{/bookings/{id}/cancel(id=${booking.id})}" method="post">
+    <button type="submit">Отменить</button>
+  </form>
+
+  <br />
+  <div>
+    <a th:href="@{/bookings}">Вернуться к списку бронирований</a>
+  </div>
+
+  <div>
+    <p th:text="${message}"></p>
+    <p th:text="${error}"></p>
+  </div>
+</body>
+</html>

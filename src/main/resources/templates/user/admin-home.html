@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Панель администратора</title>
+</head>
+<body>
+    <a th:href="@{/}">Домашняя</a>
+    <br />
+    <br />
+    <b>
+        Привет, <span th:text="${fullName} + '!'"></span>
+    </b>
+
+    <span>Твоя роль</span>
+    <span th:each="role, iterStat : ${authorityRole}">
+        <span th:text="${@roleUtil.getRoleName(role)}"></span>
+        <span th:if="${!iterStat.last}">, </span>
+    </span>
+    <hr />
+
+    <h2>Панель Администратора</h2>
+
+    <a th:href="@{/hotels}">Список отелей</a>
+    <br />
+    <br />
+    <h3>Список всех пользователей</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Имя</th>
+                <th>Фамилия</th>
+                <th>Email</th>
+                <th>Телефон</th>
+                <th>Имя пользователя</th>
+                <th>Роль</th>
+                <th>Редактировать</th>
+                <th>Удалить</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="user : ${allUsers}">
+                <td th:text="${user.firstName}"></td>
+                <td th:text="${user.lastName}"></td>
+                <td th:text="${user.email}"></td>
+                <td th:text="${user.phone}"></td>
+                <td th:text="${user.username}"></td>
+                <td>
+                    <span th:each="role, iterStat : ${user.roles}">
+                        <span th:text="${@roleUtil.getRoleName(role.authority)}"></span>
+                        <span th:if="${!iterStat.last}">, </span>
+                    </span>
+                </td>
+                <td>
+                    <a th:href="@{/admin/editUser/{id}(id=${user.id})}">Редактировать</a>
+                </td>
+                <td>
+                    <form th:action="@{/admin/deleteUser/{id}(id=${user.id})}" th:method="delete">
+                        <button type="submit">Удалить</button>
+                    </form>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <br />
+    <span th:text="${deleteMessage}" style="color: red"></span>
+    <br />
+    <br />
+    <a th:href="@{/user/profile}">Профиль пользователя</a>
+    <br />
+    <h3>Регистрация нового пользователя</h3>
+    <span th:text="${successMessage}" style="color: green"></span>
+    <br />
+    <br />
+    <form th:action="@{/admin}" th:object="${userDto}" th:method="post">
+        <div>
+            <label for="firstName">Имя:</label>
+            <input type="text" id="firstName" th:field="*{firstName}" placeholder="Имя">
+            <span th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}" style="color: red"></span>
+        </div>
+        <br />
+        <div>
+            <label for="lastName">Фамилия:</label>
+            <input type="text" id="lastName" th:field="*{lastName}" placeholder="Фамилия">
+            <span th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}" style="color: red"></span>
+        </div>
+        <br />
+        <div>
+            <label for="email">Email:</label>
+            <input type="text" id="email" th:field="*{email}" placeholder="Email">
+            <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}" style="color: red"></span>
+        </div>
+        <br />
+        <div>
+            <label for="phone">Телефон:</label>
+            <input type="tel" id="phone" th:field="*{phone}" placeholder="+x(xxx)xxx-xx-xx">
+            <span th:if="${#fields.hasErrors('phone')}" th:errors="*{phone}" style="color: red"></span>
+        </div>
+        <br />
+        <div>
+            <label for="username">Имя пользователя:</label>
+            <input type="text" id="username" th:field="*{username}" placeholder="Имя пользователя">
+            <span th:if="${#fields.hasErrors('username')}" th:errors="*{username}" style="color: red"></span>
+            <span th:text="${errorMessage}" style="color: red"></span>
+        </div>
+        <br />
+        <div>
+            <label for="password">Пароль:</label>
+            <input type="password" id="password" th:field="*{password}" placeholder="Пароль">
+            <span th:if="${#fields.hasErrors('password')}" th:errors="*{password}" style="color: red"></span>
+        </div>
+        <br />
+        <div>
+            <fieldset>
+                <legend>Роли</legend>
+                <div th:each="role : ${allRoles}">
+                    <input type="checkbox" th:id="${role.authority}" th:field="*{roles}" th:value="${role.authority}">
+                    <label th:for="${role.authority}" th:text="${role.authority}"></label>
+                </div>
+                <span th:if="${#fields.hasErrors('roles')}" th:errors="*{roles}" style="color: red"></span>
+            </fieldset>
+        </div>
+        <br />
+        <button type="submit">Зарегистрировать</button>
+    </form>
+    <br />
+    <a th:href="@{/logout}">Выйти</a>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
+            integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/5.0.9/jquery.inputmask.min.js"
+            integrity="sha512-F5Ul1uuyFlGnIT1dk2c4kB4DBdi5wnBJjVhL7gQlGh46Xn0VhvD8kgxLtjdZ5YN83gybk/aASUAlpdoWUjRR3g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <script>
+        $(document).ready(function(){
+            $('#phone').inputmask({
+                mask: "+9(999)999-99-99",
+                placeholder: "_"
+            });
+        });
+    </script>
+    </body>
+</html>

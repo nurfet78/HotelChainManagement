@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Доступность номера</title>
+</head>
+<body>
+    <a th:href="@{/}">Домашняя</a>
+    <br />
+    <br />
+    <h1>Проверка доступности номера</h1>
+
+    <div>
+        <p>Номер: <span th:text="${room.category}"></span></p>
+        <p>Отель: <span th:text="${hotel.name}"></span></p>
+    </div>
+
+    <form th:action="@{/hotels/{hotelId}/rooms/{roomId}/availability(hotelId=${hotel.id}, roomId=${room.id})}"  method="post">
+        <div>
+            <label for="checkInDate">Дата заезда:</label>
+            <input type="date" id="checkInDate" name="checkInDate" required>
+        </div>
+        <br />
+        <div>
+            <label for="checkInTime">Время заезда:</label>
+            <input type="time" id="checkInTime" name="checkInTime" required>
+        </div>
+        <br />
+        <div>
+            <label for="checkOutDate">Дата выезда:</label>
+            <input type="date" id="checkOutDate" name="checkOutDate" required>
+        </div>
+        <br />
+        <div>
+            <label for="checkOutTime">Время выезда:</label>
+            <input type="time" id="checkOutTime" name="checkOutTime" required>
+        </div>
+        <br />
+        <button type="submit">Проверить доступность</button>
+    </form>
+
+    <div th:if="${isAvailable != null}">
+        <p th:if="${!isAvailable}">Номер доступен на указанные даты.</p>
+        <p th:if="${isAvailable}">Номер занят на указанные даты.</p>
+    </div>
+
+    <br />
+    <a th:href="@{/hotels/{hotelId}/rooms(hotelId=${hotel.id})}">Назад к списку номеров</a>
+</body>
+</html>

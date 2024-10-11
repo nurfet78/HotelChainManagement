@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Детали отеля</title>
+</head>
+<body>
+    <a th:href="@{/}">Домашняя</a>
+    <br />
+    <br />
+    <h1 th:text="${hotel.name}">Название отеля</h1>
+
+    <p>Местоположение: <span th:text="${hotel.location}"></span></p>
+    <p>Услуги: <span th:text="${hotel.services}"></span></p>
+    <p>Рейтинг: <span th:text="${hotel.rating}"></span></p>
+    <p>Описание: <span th:text="${hotel.description}"></span></p>
+
+    <a th:href="@{/hotels/{hotelId}/rooms(hotelId=${hotel.id})}">Номера</a>
+    <br />
+    <br />
+    <a href="/hotels">Назад к списку отелей</a>
+</body>
+</html>

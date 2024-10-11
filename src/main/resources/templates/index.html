@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Главная</title>
+</head>
+<body>
+    <span th:if="${authenticationName}">
+        <span th:text="|Спасибо, что посетили нас, ${authenticationName}! Возвращайтесь снова.|"></span>
+    </span>
+    <h1>Добро пожаловать!</h1>
+    <h4>Вас приветствует Отель Сервис</h4>
+
+    <th:block sec:authorize="!isAuthenticated()">
+        <a th:href="@{/login}">Бронировать</a>
+    </th:block>
+    <th:block sec:authorize="isAuthenticated()">
+        <a th:href="@{/hotels}" style="color: green">Выбрать отель</a>
+        <br />
+        <span sec:authorize="hasRole('ADMIN')">
+        <br />
+            <a th:href="@{/admin}">Панель администратора</a>
+        <br />
+        </span>
+        <br />
+        <span sec:authorize="hasRole('USER')">
+            <a th:href="@{/user}">Панель пользователя</a>
+        </span>
+        <br />
+        <br />
+        <a th:href="@{/logout}">Выход</a>
+    </th:block>
+</body>
+</html>

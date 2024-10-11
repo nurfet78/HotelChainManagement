@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Create Booking</title>
+    <script>
+        // Функция для отображения всплывающего окна с сообщением
+        function showAlert(message) {
+            alert(message);
+        }
+    </script>
+</head>
+<body>
+    <a th:href="@{/}">Домашняя</a>
+    <br />
+    <br />
+    <h1>Создание бронирования для номера <span th:text="${booking.room.category}"></span></h1>
+
+    <form th:action="@{/bookings/create/{hotelId}/{roomId}(hotelId=${booking.room.hotel.id}, roomId=${booking.room.id})}"
+          th:object="${booking}" method="post">
+
+        <div th:if="${#fields.hasGlobalErrors()}" th:each="err : ${#fields.globalErrors}">
+            <p th:text="${err}" style="color: red"></p>
+        </div>
+
+        <br />
+        <div>
+            <label for="checkInDate">Дата заезда:</label>
+            <input type="date" id="checkInDate" th:field="*{checkInDate}">
+            <span th:if="${#fields.hasErrors('checkInDate')}" th:errors="*{checkInDate}"
+            style="color: red"></span>
+        </div>
+        <br>
+        <div>
+            <label for="checkInTime">Время заезда:</label>
+            <input type="time" id="checkInTime" th:field="*{checkInTime}">
+            <span th:if="${#fields.hasErrors('checkInTime')}" th:errors="*{checkInTime}"
+            style="color: red"></span>
+        </div>
+        <br />
+        <div>
+            <label for="checkOutDate">Дата выезда:</label>
+            <input type="date" id="checkOutDate" th:field="*{checkOutDate}">
+            <span th:if="${#fields.hasErrors('checkOutDate')}" th:errors="*{checkOutDate}"
+                  style="color: red"></span>
+        </div>
+        <br>
+        <div>
+            <label for="checkOutTime">Время выезда:</label>
+            <input type="time" id="checkOutTime" th:field="*{checkOutTime}">
+            <span th:if="${#fields.hasErrors('checkOutTime')}" th:errors="*{checkOutTime}"
+                  style="color: red"></span>
+        </div>
+        <br />
+        <div th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}">
+            <label for="guest">Выберите гостя:</label>
+            <select id="guest" th:name="guestId" required>
+                <option th:each="user : ${users}"
+                        th:value="${user.id}"
+                        th:text="${user.firstName} + ' ' + ${user.lastName}">
+                </option>
+            </select>
+        </div>
+        <br />
+        <button type="submit">Забронировать</button>
+    </form>
+    <br />
+    <span th:text="${message}"></span>
+    <span th:text="${error}"></span>
+    <br />
+
+    <script th:if="${error != null}">
+        showAlert('[[${error}]]');
+    </script>
+
+    <a th:href="@{/hotels/{hotelId}/rooms(hotelId=${booking.room.hotel.id})}">Вернуться к номерам</a>
+
+</body>
+</html>

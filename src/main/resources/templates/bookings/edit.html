@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Изменение бронирования</title>
+</head>
+<body>
+    <a th:href="@{/}">Домашняя</a>
+    <br />
+    <br />
+    <h1>Изменение бронирования</h1>
+    <form th:action="@{/bookings/{id}/edit(id=${booking.id})}" th:object="${booking}" th:method="put">
+
+        <div th:if="${#fields.hasGlobalErrors()}" th:each="err : ${#fields.globalErrors}">
+            <p th:text="${err}" style="color: red"></p>
+        </div>
+        <br />
+        <div>
+            <label for="checkInDate">Дата въезда:</label>
+            <input type="date" id="checkInDate" th:field="*{checkInDate}">
+            <span th:if="${#fields.hasErrors('checkInDate')}" th:errors="*{checkInDate}"
+                  style="color: red"></span>
+        </div>
+        <br />
+        <div>
+            <label for="checkInTime">Время заезда:</label>
+            <input type="time" id="checkInTime" th:field="*{checkInTime}">
+            <span th:if="${#fields.hasErrors('checkInTime')}" th:errors="*{checkInTime}"
+                  style="color: red"></span>
+        </div>
+        <br />
+        <div>
+            <label for="checkOutDate">Дата выезда:</label>
+            <input type="date" id="checkOutDate" th:field="*{checkOutDate}">
+            <span th:if="${#fields.hasErrors('checkOutDate')}" th:errors="*{checkOutDate}"
+                  style="color: red"></span>
+        </div>
+        <br />
+        <div>
+            <label for="checkOutTime">Время выезда:</label>
+            <input type="time" id="checkOutTime" th:field="*{checkOutTime}">
+            <span th:if="${#fields.hasErrors('checkOutTime')}" th:errors="*{checkOutTime}"
+                  style="color: red"></span>
+        </div>
+        <br />
+        <button type="submit">Обновить бронирование</button>
+    </form>
+    <br />
+    <div>
+        <a th:href="@{/bookings}">Вернуться к списку бронирований</a>
+    </div>
+
+    <div>
+        <p th:text="${message}"></p>
+        <p th:text="${error}"></p>
+    </div>
+</body>
+</html>

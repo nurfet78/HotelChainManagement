@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+  <meta charset="UTF-8">
+  <title>Профиль</title>
+</head>
+<body>
+  <a th:href="@{/}">Домашняя</a>
+  <br />
+  <br />
+    <h2>Профиль</h2>
+    <div>
+        <p>Имя: <span th:text="${user.firstName}"></span></p>
+        <p>Фамилия: <span th:text="${user.lastName}"></span></p>
+        <p>Email: <span th:text="${user.email}"></span></p>
+        <p>Телефон: <span th:text="${user.phone}"></span></p>
+        <p>Имя пользователя: <span th:text="${user.username}"></span></p>
+    </div>
+    <hr />
+    <br />
+    <a th:href="@{/user/editUser}">Редактировать профиль</a>
+    <br />
+    <span sec:authorize="hasRole('ADMIN')">
+        <br />
+        <a th:href="@{/admin}">Панель администратора</a>
+        <br />
+    </span>
+    <br />
+    <span sec:authorize="hasRole('USER')">
+        <a th:href="@{/user}">Панель пользователя</a>
+    </span>
+    <br />
+    <br />
+    <a href="javascript:history.back()">Назад</a>
+    <br />
+    <br />
+    <a th:href="@{/logout}">Выйти</a>
+</body>
+</html>

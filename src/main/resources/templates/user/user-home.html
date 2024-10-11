@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Панель пользователя</title>
+</head>
+<body>
+    <a th:href="@{/}">Домашняя</a>
+    <br />
+    <br />
+    <b>
+        Привет, <span th:text="${user} + '!'"></span>
+    </b>
+
+    <h2>Панель пользователя</h2>
+
+    <a th:href="@{/hotels}">Выбрать отель</a>
+    <br />
+    <br />
+    <a th:href="@{/user/profile}">Профиль</a>
+    <br />
+    <br />
+    <a th:href="@{/logout}">Выйти</a>
+</body>
+</html>
