@@ -1,16 +1,13 @@
 package org.nurfet.hotelchain.controller;
 
-import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.nurfet.hotelchain.exception.NotFoundException;
 import org.nurfet.hotelchain.model.Booking;
 import org.nurfet.hotelchain.model.User;
 import org.nurfet.hotelchain.model.Hotel;
 import org.nurfet.hotelchain.model.Room;
 import org.nurfet.hotelchain.service.BookingService;
-import org.nurfet.hotelchain.service.HotelService;
 import org.nurfet.hotelchain.service.UserService;
 import org.nurfet.hotelchain.service.RoomService;
 import org.springframework.stereotype.Controller;
@@ -20,11 +17,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.security.Principal;
-import java.util.Optional;
-import java.time.LocalDate;
-
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Controller
