@@ -104,8 +104,6 @@ public class RoomController {
                              @Valid @ModelAttribute("room") Room room,
                              BindingResult result, RedirectAttributes redirectAttributes, Model model) {
 
-        log.info("hotelId: {}, roomId: {}", hotelId, roomId);
-
         Hotel hotel = (Hotel) model.getAttribute("hotel");
 
         if (result.hasErrors()) {
@@ -113,7 +111,7 @@ public class RoomController {
             return "rooms/edit";
         }
 
-        room.setId(roomId);  // Устанавливаем id комнаты
+        room.setId(roomId);
         roomService.updateRoom(hotelId, roomId, room);
         redirectAttributes.addFlashAttribute("message", "Данные номера успешно обновлены!");
         return "redirect:/hotels/" + hotelId + "/rooms";
