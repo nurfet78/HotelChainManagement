@@ -25,7 +25,6 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/hotels/{hotelId}/rooms")
 @Slf4j
-@SessionAttributes({"hotel", "room"})
 public class RoomController {
 
     private final RoomService roomService;
@@ -37,17 +36,16 @@ public class RoomController {
 
     @GetMapping
     public String getAllRooms(@PathVariable Long hotelId, Model model) {
-        Hotel hotel = hotelService.getHotelById(hotelId).orElseThrow(() -> new NotFoundException(Hotel.class, hotelId));
+        Hotel hotel = hotelService.getHotelById(hotelId);
         List<Room> rooms = roomService.getRoomsByHotelId(hotelId);
         model.addAttribute("hotel", hotel);
         model.addAttribute("rooms", rooms);
-        return "rooms/list";  // шаблон "rooms/list.html"
+        return "rooms/list";
     }
 
     @GetMapping("/new")
     public String showCreateForm(@PathVariable("hotelId") Long hotelId, Model model) {
-        Hotel hotel = hotelService.getHotelById(hotelId)
-                .orElseThrow(() -> new NotFoundException(Hotel.class, hotelId));
+        Hotel hotel = hotelService.getHotelById(hotelId);
 
         Room room = new Room();
         model.addAttribute("hotel", hotel);
@@ -60,8 +58,7 @@ public class RoomController {
     public String createRoom(@PathVariable Long hotelId, @Valid @ModelAttribute("room") Room room, BindingResult result,
                              RedirectAttributes redirectAttributes, Model model) {
 
-        Hotel hotel = hotelService.getHotelById(hotelId)
-                .orElseThrow(() -> new NotFoundException(Hotel.class, hotelId));
+        Hotel hotel = hotelService.getHotelById(hotelId);
 
         if (result.hasErrors()) {
             model.addAttribute("hotel", hotel);
@@ -75,10 +72,8 @@ public class RoomController {
 
     @GetMapping("/{roomId}")
     public String getRoomById(@PathVariable Long hotelId, @PathVariable Long roomId, Model model) {
-        Room room = roomService.getRoomById(hotelId, roomId)
-                .orElseThrow(() -> new NotFoundException(Room.class, roomId));
-        Hotel hotel = hotelService.getHotelById(hotelId)
-                .orElseThrow(() -> new NotFoundException(Hotel.class, hotelId));
+        Room room = roomService.getRoomById(hotelId, roomId);
+        Hotel hotel = hotelService.getHotelById(hotelId);
 
         model.addAttribute("room", room);
         model.addAttribute("hotel", hotel);
@@ -88,10 +83,8 @@ public class RoomController {
 
     @GetMapping("/{roomId}/edit")
     public String showEditForm(@PathVariable Long hotelId, @PathVariable Long roomId, Model model) {
-        Room room = roomService.getRoomById(hotelId, roomId)
-                .orElseThrow(() -> new NotFoundException(Room.class, roomId));
-        Hotel hotel = hotelService.getHotelById(hotelId)
-                .orElseThrow(() -> new NotFoundException(Hotel.class, hotelId));
+        Room room = roomService.getRoomById(hotelId, roomId);
+        Hotel hotel = hotelService.getHotelById(hotelId);
 
         model.addAttribute("room", room);
         model.addAttribute("hotel", hotel);
@@ -100,18 +93,17 @@ public class RoomController {
     }
 
     @PostMapping("/{roomId}")
-    public String updateRoom(@PathVariable Long hotelId, @PathVariable Long roomId,
-                             @Valid @ModelAttribute("room") Room room,
+    public String updateRoom(@PathVariable Long hotelId, @PathVariable Long roomId, @Valid @ModelAttribute("room") Room room,
                              BindingResult result, RedirectAttributes redirectAttributes, Model model) {
 
-        Hotel hotel = (Hotel) model.getAttribute("hotel");
+        Hotel hotel = hotelService.getHotelById(hotelId);
+
 
         if (result.hasErrors()) {
             model.addAttribute("hotel", hotel);
+            model.addAttribute("room", room);
             return "rooms/edit";
         }
-
-        room.setId(roomId);
         roomService.updateRoom(hotelId, roomId, room);
         redirectAttributes.addFlashAttribute("message", "Данные номера успешно обновлены!");
         return "redirect:/hotels/" + hotelId + "/rooms";
@@ -134,8 +126,7 @@ public class RoomController {
     public String checkRoomAvailability(@PathVariable("hotelId") Long hotelId,
                                         @PathVariable("roomId") Long roomId,
                                         Model model) {
-        Room room = roomService.getRoomById(hotelId, roomId)
-                .orElseThrow(() -> new NotFoundException(Room.class, roomId));
+        Room room = roomService.getRoomById(hotelId, roomId);
 
         model.addAttribute("room", room);
         model.addAttribute("hotel", room.getHotel());
@@ -152,8 +143,7 @@ public class RoomController {
                                         @RequestParam("checkOutTime") @DateTimeFormat(iso = DateTimeFormat.ISO.TIME) LocalTime checkOutTime,
                                         Model model) {
 
-        Room room = roomService.getRoomById(hotelId, roomId)
-                .orElseThrow(() -> new NotFoundException(Room.class, roomId));
+        Room room = roomService.getRoomById(hotelId, roomId);
 
         boolean isAvailable = bookingService.isRoomAvailable(roomId, checkInDate, checkInTime, checkOutDate, checkOutTime, null);
 
@@ -172,8 +162,7 @@ public class RoomController {
                               @RequestParam("category") String category,
                               Model model) {
         List<Room> rooms = roomService.searchByCategory(hotelId, category);
-        Hotel hotel = hotelService.getHotelById(hotelId)
-                .orElseThrow(() -> new NotFoundException(Room.class, hotelId));
+        Hotel hotel = hotelService.getHotelById(hotelId);
 
         model.addAttribute("rooms", rooms);
         model.addAttribute("hotel", hotel);

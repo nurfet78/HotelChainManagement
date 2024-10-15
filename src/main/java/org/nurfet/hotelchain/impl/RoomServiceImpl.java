@@ -31,8 +31,9 @@ public class RoomServiceImpl implements RoomService {
     }
 
     @Override
-    public Optional<Room> getRoomById(Long hotelId, Long roomId) {
-        return roomRepository.findByHotelIdAndId(hotelId, roomId);
+    public Room getRoomById(Long hotelId, Long roomId) {
+        return roomRepository.findByHotelIdAndId(hotelId, roomId)
+                .orElseThrow(() -> new NotFoundException(Room.class, roomId));
     }
 
     @Override

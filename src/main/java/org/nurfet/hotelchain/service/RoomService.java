@@ -10,7 +10,7 @@ public interface RoomService {
 
     Room createRoom(Long hotelId, Room room);
 
-    Optional<Room> getRoomById(Long hotelId, Long roomId);
+    Room getRoomById(Long hotelId, Long roomId);
 
     List<Room> getRoomsByHotelId(Long hotelId);
 

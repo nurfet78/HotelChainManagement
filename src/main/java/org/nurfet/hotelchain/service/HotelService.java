@@ -9,7 +9,7 @@ public interface HotelService {
 
     Hotel createHotel(Hotel hotel);
 
-    Optional<Hotel> getHotelById(Long id);
+    Hotel getHotelById(Long id);
 
     List<Hotel> getAllHotels();
 

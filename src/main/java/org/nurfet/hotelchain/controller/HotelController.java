@@ -51,14 +51,14 @@ public class HotelController {
 
     @GetMapping("/{id}")
     public String getHotelById(@PathVariable Long id, Model model) {
-        Hotel hotel = hotelService.getHotelById(id).orElseThrow(() -> new NotFoundException(Hotel.class, id));
+        Hotel hotel = hotelService.getHotelById(id);
         model.addAttribute("hotel", hotel);
         return "hotels/details";
     }
 
     @GetMapping("/{id}/edit")
     public String showEditForm(@PathVariable Long id, Model model) {
-        Hotel hotel = hotelService.getHotelById(id).orElseThrow(() -> new NotFoundException(Hotel.class, id));
+        Hotel hotel = hotelService.getHotelById(id);
         model.addAttribute("hotel", hotel);
         return "hotels/edit";
     }

@@ -39,7 +39,6 @@ public class BookingController {
 
     private final UserService userService;
 
-    private final HotelService hotelService;
 
     @GetMapping("/new/{hotelId}/{roomId}")
     public String showCreateForm(@PathVariable Long hotelId, @PathVariable Long roomId, Model model) {
@@ -47,7 +46,7 @@ public class BookingController {
         List<User> users = userService.findAllUsers();
 
         Booking booking = new Booking();
-        booking.setRoom(roomService.getRoomById(hotelId, roomId).orElseThrow(() -> new NotFoundException(Room.class, roomId)));
+        booking.setRoom(roomService.getRoomById(hotelId, roomId));
 
         model.addAttribute("booking", booking);
         model.addAttribute("users", users);
@@ -65,16 +64,14 @@ public class BookingController {
         if (result.hasErrors()) {
             log.info("Сообщение валидатора: {}", result.getFieldError());
             List<User> users = userService.findAllUsers();
-            booking.setRoom(roomService.getRoomById(hotelId, roomId)
-                    .orElseThrow(() -> new NotFoundException(Room.class, roomId)));
+            booking.setRoom(roomService.getRoomById(hotelId, roomId));
             model.addAttribute("booking", booking);
             model.addAttribute("guests", users);
             return "bookings/create";
         }
 
         try {
-            Room room = roomService.getRoomById(hotelId, roomId)
-                    .orElseThrow(() -> new NotFoundException(Room.class, roomId));
+            Room room = roomService.getRoomById(hotelId, roomId);
 
             User user;
             if (guestId != null) {
@@ -104,7 +101,7 @@ public class BookingController {
 
     @GetMapping("/{id}/confirm")
     public String showConfirmForm(@PathVariable Long id, Model model) {
-        Booking booking = bookingService.getBookingById(id).orElseThrow(() -> new NotFoundException(Booking.class, id));
+        Booking booking = bookingService.getBookingById(id);
         model.addAttribute("booking", booking);
         return "bookings/confirm";
     }
@@ -124,7 +121,7 @@ public class BookingController {
 
     @GetMapping("/{id}/cancel")
     public String showCancelForm(@PathVariable Long id, Model model) {
-        Booking booking = bookingService.getBookingById(id).orElseThrow(() -> new NotFoundException(Booking.class, id));
+        Booking booking = bookingService.getBookingById(id);
         model.addAttribute("booking", booking);
         return "bookings/cancel";
     }
@@ -143,7 +140,7 @@ public class BookingController {
 
     @GetMapping("/{id}/edit")
     public String showEditForm(@PathVariable Long id, Model model) {
-        Booking booking = bookingService.getBookingById(id).orElseThrow(() -> new NotFoundException(Booking.class, id));
+        Booking booking = bookingService.getBookingById(id);
 
         model.addAttribute("booking", booking);
         return "bookings/edit";
@@ -157,7 +154,7 @@ public class BookingController {
                                 RedirectAttributes redirectAttributes) {
 
         if (result.hasErrors()) {
-            Booking booking = bookingService.getBookingById(bookingId).orElseThrow(() -> new NotFoundException(Booking.class, bookingId));
+            Booking booking = bookingService.getBookingById(bookingId);
 
             redirectAttributes.addFlashAttribute("booking", booking);
             return "bookings/edit";

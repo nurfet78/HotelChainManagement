@@ -30,8 +30,8 @@ public class HotelServiceImpl implements HotelService {
     }
 
     @Override
-    public Optional<Hotel> getHotelById(Long id) {
-        return hotelRepository.findById(id);
+    public Hotel getHotelById(Long id) {
+        return hotelRepository.findById(id).orElseThrow(() -> new NotFoundException(Hotel.class, id));
     }
 
     @Override

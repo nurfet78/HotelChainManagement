@@ -34,8 +34,8 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public Optional<Booking> getBookingById(Long id) {
-        return bookingRepository.findById(id);
+    public Booking getBookingById(Long id) {
+        return bookingRepository.findById(id).orElseThrow(() -> new NotFoundException(Booking.class, id));
     }
 
     @Override
