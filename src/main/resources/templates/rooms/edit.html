@@ -10,20 +10,27 @@
     <br />
     <h1>Редактировать номер</h1>
 
-    <form th:action="@{/hotels/{hotelId}/rooms/{roomId}(hotelId=${hotel.id}, roomId=${room.id})}" th:object="${room}" th:method="put">
+    <form th:action="@{/hotels/{hotelId}/rooms/{roomId}(hotelId=${hotel.id}, roomId=${room.id})}" th:object="${room}" th:method="post">
+        <input type="hidden" name="id" th:field="*{id}" />
         <div>
             <label for="category">Категория:</label>
             <input type="text" id="category" th:field="*{category}" placeholder="Категория">
+            <span th:if="${#fields.hasErrors('category')}" th:errors="*{category}"
+                  style="color: red"></span>
         </div>
         <br />
         <div>
             <label for="price">Цена:</label>
             <input type="number" id="price" th:field="*{price}" placeholder="Цена" step="0.01">
+            <span th:if="${#fields.hasErrors('price')}" th:errors="*{price}"
+                  style="color: red"></span>
         </div>
         <br />
         <div>
             <label for="description">Описание:</label>
             <textarea id="description" th:field="*{description}" placeholder="Описание номера"></textarea>
+            <span th:if="${#fields.hasErrors('description')}" th:errors="*{description}"
+                  style="color: red"></span>
         </div>
         <br />
         <button type="submit">Сохранить изменения</button>

@@ -1,5 +1,6 @@
 package org.nurfet.hotelchain.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.nurfet.hotelchain.exception.NotFoundException;
@@ -24,6 +25,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/hotels/{hotelId}/rooms")
 @Slf4j
+@SessionAttributes({"hotel", "room"})
 public class RoomController {
 
     private final RoomService roomService;
@@ -55,8 +57,15 @@ public class RoomController {
 
 
     @PostMapping
-    public String createRoom(@PathVariable Long hotelId, @ModelAttribute("room") Room room, BindingResult result, RedirectAttributes redirectAttributes) {
+    public String createRoom(@PathVariable Long hotelId, @Valid @ModelAttribute("room") Room room, BindingResult result,
+                             RedirectAttributes redirectAttributes, Model model) {
+
+        Hotel hotel = hotelService.getHotelById(hotelId)
+                .orElseThrow(() -> new NotFoundException(Hotel.class, hotelId));
+
         if (result.hasErrors()) {
+            model.addAttribute("hotel", hotel);
+            model.addAttribute("room", room);
             return "rooms/new";
         }
         roomService.createRoom(hotelId, room);
@@ -90,11 +99,21 @@ public class RoomController {
         return "rooms/edit";
     }
 
-    @PutMapping("/{roomId}")
-    public String updateRoom(@PathVariable Long hotelId, @PathVariable Long roomId, @ModelAttribute("room") Room room, BindingResult result, RedirectAttributes redirectAttributes) {
+    @PostMapping("/{roomId}")
+    public String updateRoom(@PathVariable Long hotelId, @PathVariable Long roomId,
+                             @Valid @ModelAttribute("room") Room room,
+                             BindingResult result, RedirectAttributes redirectAttributes, Model model) {
+
+        log.info("hotelId: {}, roomId: {}", hotelId, roomId);
+
+        Hotel hotel = (Hotel) model.getAttribute("hotel");
+
         if (result.hasErrors()) {
+            model.addAttribute("hotel", hotel);
             return "rooms/edit";
         }
+
+        room.setId(roomId);  // Устанавливаем id комнаты
         roomService.updateRoom(hotelId, roomId, room);
         redirectAttributes.addFlashAttribute("message", "Данные номера успешно обновлены!");
         return "redirect:/hotels/" + hotelId + "/rooms";
